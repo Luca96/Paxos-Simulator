@@ -1,7 +1,5 @@
 package com.luca.anzalone.utils;
 
-import com.sun.istack.internal.NotNull;
-
 /**
  * Classe che rappresenta un round, identificato da una coppia (counter, id).
  */
@@ -88,7 +86,6 @@ public class Round implements Comparable<Round> {
     public String toString() {
         if (isEmpty())
             return "(NaN, NaN)";
-//            return "Round (NaN, NaN)";
 
 //        return String.format("Round [count: %d, id: %d]", count, id);
         return String.format("(%d, %d)", count, id);

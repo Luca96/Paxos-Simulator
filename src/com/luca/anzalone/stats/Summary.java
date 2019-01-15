@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Statistiche per una singola esecuzione
+ * Summary compute the statistics for a single execution
  */
 public class Summary {
     // messages
@@ -39,6 +39,7 @@ public class Summary {
             rounds = round.getCount();
     }
 
+    /** keeps track of the decided values and if they are all the same (agreement) */
     public void decidedValue(int rank, int value) {
         decisions.put(rank, value);
         agreement = decisions.values().stream().allMatch(v -> v == value);

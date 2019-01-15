@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Classe per i messaggi inviati dai nodi (di diversa tipologia e parametri)
+ * Messages sent across nodes
  */
 public class Message {
     private Type type;
@@ -18,7 +18,7 @@ public class Message {
 
     //TODO: add @NotNull to constructors
 
-    /** oldRound, leaderElected */
+    /** queryAlive, alive */
     public Message(@NotNull Type type) {
         this.type = type;
     }
@@ -29,7 +29,7 @@ public class Message {
         this.r1 = r;
     }
 
-    /** success, leaderElection */
+    /** success */
     public Message(@NotNull Type type, int value) {
         this.type  = type;
         this.value = value;
@@ -41,6 +41,7 @@ public class Message {
         this.value = value;
     }
 
+    /** old-round */
     public Message(Type type, Round r1, @NotNull Round r2) {
         this(type, r1);
         this.r2 = r2;
@@ -79,7 +80,6 @@ public class Message {
 
     public void setSender(int sender) { this.sender = sender; }
 
-    /** fa una copia del messaggio */
     public Message copy() {
         Message m = new Message(type);
         m.r1 = (r1 == null) ? Round.empty() : r1.copy();
@@ -90,8 +90,7 @@ public class Message {
     }
 
     /**
-     * Ritorna un [Set] contenente gli id univoci dei sender.
-     * Definire le maggioranze sul numero di id univoci permette di essere resistenti rispetto a messaggi duplicati.
+     * Returns a Set of unique senders identifiers (ranks)
      */
     public static Set<Integer> uniqueSenders(@NotNull List<Message> messages){
         final Set<Integer> senders = new TreeSet<>();
@@ -109,12 +108,8 @@ public class Message {
         oldRound,
         accept,
         begin,
-        beginElection,
-        election,
-        leaderElected,
         queryAlive,
         alive,
-        ack,
     }
 
     @Override

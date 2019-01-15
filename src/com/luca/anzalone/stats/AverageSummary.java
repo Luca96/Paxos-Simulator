@@ -3,6 +3,9 @@ package com.luca.anzalone.stats;
 import com.luca.anzalone.Channel;
 import com.sun.istack.internal.NotNull;
 
+/**
+ * AverageSummary is responsible to compute a set of statistics related to a set of executions
+ */
 public class AverageSummary extends Summary {
     private int[] initialValues;
     private int executionCount;
@@ -24,7 +27,7 @@ public class AverageSummary extends Summary {
         this.executionCount = executions;
     }
 
-    /** calcola le statisiche (summary) a partire da un serie di esecuzioni */
+    /** compute the summary for [executionCount] simulations */
     public AverageSummary calculate() {
         print("Running %d executions...", executionCount);
 
@@ -61,13 +64,16 @@ public class AverageSummary extends Summary {
         lostMessages  = Math.floorDiv(lostMessages, executionCount);
         timeElapsed   = Math.floorDiv(timeElapsed, executionCount);
         duplicatedMessages = Math.floorDiv(duplicatedMessages, executionCount);
-        avgRounds  = Math.floorDiv(avgRounds, executionCount);
+        avgRounds   = Math.floorDiv(avgRounds, executionCount);
         avgBreaking = brokenEvents / (float) executionCount;
-        totalNodes = initialValues.length;
+        totalNodes  = initialValues.length;
 
         return this;
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // -- Utilities
+    // -----------------------------------------------------------------------------------------------------------------
     private String percentage(float x, float y) {
         if (x == 0)
             return "0%";

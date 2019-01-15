@@ -10,6 +10,10 @@ import com.sun.media.jfxmedia.logging.Logger;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
+/**
+ * Main Class
+ * @author Luca Anzalone
+ */
 public class Paxos {
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -27,29 +31,31 @@ public class Paxos {
         Logger.setLevel(Logger.DEBUG);
         title();
 
-        // init parameters
+        // environment parameters
         Globals.CHANNEL_DELAY     = 100;
         Globals.TIMEOUT           = (Globals.CHANNEL_DELAY * 3);
         Globals.MESSAGE_LOST_RATE = 35;
-//        Globals.BROKEN_RATE       = 25;
-        Globals.MESSAGE_DUPLICATION_RATE = 10;
+        Globals.BROKEN_RATE       = 25;
+        Globals.MESSAGE_DUPLICATION_RATE = 15;
         Globals.MAX_EXE_SPEED     = 10;
         Globals.BROKEN_TIME       = Globals.CHANNEL_DELAY * 4;
+        Globals.ELECTION_TIMEOUT  = Globals.TIMEOUT + Globals.BROKEN_TIME;
 
         // debug profile
         Debug.ENABLED = false;
 //        Debug.MSG_RECEPTION = true;
 //        Debug.MSG_SENDING   = true;
-        Debug.MSG_LOST = true;
+//        Debug.MSG_LOST = true;
 //        Debug.MSG_DUPLICATED = true;
-        Debug.NODE_STATE  = true;
-        Debug.NODE_BROKEN = true;
+//        Debug.NODE_STATE  = true;
+//        Debug.NODE_BROKEN = true;
 //        Debug.NODE_REPAIRED = true;
         Debug.NODE_DECISION = true;
         Debug.LOG_OLDROUND  = true;
+        Debug.ELECTION_TIMEOUT = true;
 
-        // avvio
-        prompt("Numero di esecuzioni: ", null, input -> {
+        // launch with benchmarking
+        prompt("Number of simulations: ", null, input -> {
             int num = 1;
             try { num = Integer.parseInt(input); } catch (RuntimeException ignored) {}
 
@@ -57,12 +63,14 @@ public class Paxos {
                     .calculate()
                     .print();
 
-            prompt("\nMostrare log delle esecuzioni? (si/no)", "si",
+            prompt("\nShow the executions log? (y/n)", "y",
                     x -> Debug.printLogSummary());
         });
 
         System.exit(0);
     }
+
+    // -----------------------------------------------------------------------------------------------------------------
 
     private static void prompt(@NotNull String ask, @Nullable String answer, @NotNull Consumer<String> callback) {
         System.out.println(ask);
@@ -77,7 +85,7 @@ public class Paxos {
         System.out.println("------------------------ Paxos Simulator ------------------------");
         System.out.println("-----------------------------------------------------------------");
         System.out.println("-- version: 1.0");
-        System.out.println("-- author: Luca Anzalone");
+        System.out.println("-- author : Luca Anzalone");
         System.out.println("-----------------------------------------------------------------\n");
     }
 }

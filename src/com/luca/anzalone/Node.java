@@ -20,10 +20,10 @@ import static com.luca.anzalone.Node.State.*;
 public class Node extends Thread implements Runnable {
     private int rank;                 // identificatore univoco del nodo
     private int value;                // valore iniziale del nodo
-    private int exeSpeed;             // velocità di esecuzione di un nodo (clock)
-    private State stato = candidate;  // inizialmente i nodi sono dei candidati da eleggere a leader
+    private int exeSpeed;             // velocità di esecuzione simulata di un nodo (clock)
+    private State stato = candidate;  // inizialmente i nodi sono dei candidati per l'elezione
     private boolean decision = false;
-    private TreeSet<Integer> nodesAlive = new TreeSet<>();  // tiene traccia dei noti attivi (non guasti)
+    private TreeSet<Integer> nodesAlive = new TreeSet<>();  // tiene traccia dei noti partecipanti
     private final Channel channel;
     private final Logger log;
     private final ConcurrentLinkedQueue<Message> messageQueue = new ConcurrentLinkedQueue<>();
@@ -34,6 +34,7 @@ public class Node extends Thread implements Runnable {
     private Round lastRound;
     private int lastValue;
     private int proposedValue;
+    private long deltaTime = 0;
     //-----------------------------------------------------
 
     /**
@@ -61,6 +62,9 @@ public class Node extends Thread implements Runnable {
 
     @Override
     public void run() {
+        // take initial execution time
+        deltaTime = currentTime();
+
         while (!decision) {
             switch (stato) {
                 case voter:
@@ -79,6 +83,14 @@ public class Node extends Thread implements Runnable {
                 case candidate:
                     electionPhase();
                     break;
+            }
+
+            if (isElectionTimeoutExpired()) {
+                Debug.logIf(Debug.ELECTION_TIMEOUT, "Election-Timeout", toString());
+                logIf(Debug.ELECTION_TIMEOUT, "Election-Timeout", toString());
+
+                deltaTime = currentTime();
+                stato = candidate;
             }
         }
 
@@ -113,8 +125,7 @@ public class Node extends Thread implements Runnable {
                 channel.summary.updateRound(commit);
             } else {
                 channel.send(this, sender, new Message(oldRound, r.copy(), commit.copy()));
-                Debug.logIf(Debug.LOG_OLDROUND, phaseName, "[OLD-ROUND in collect] %s",
-                        new Message(oldRound, r.copy(), commit.copy()));
+                Debug.logIf(Debug.LOG_OLDROUND, phaseName, "[OLD-ROUND in collect] %s", msg);
             }
         });
 
@@ -132,8 +143,7 @@ public class Node extends Thread implements Runnable {
                 lastValue = v;
             } else {
                 channel.send(this, sender, new Message(oldRound, r.copy(), commit.copy()));
-                Debug.logIf(Debug.LOG_OLDROUND, phaseName, "[OLD-ROUND in begin] %s",
-                        new Message(oldRound, r.copy(), commit.copy()));
+                Debug.logIf(Debug.LOG_OLDROUND, phaseName, "[OLD-ROUND in begin] %s", msg);
             }
         });
     }
@@ -232,7 +242,7 @@ public class Node extends Thread implements Runnable {
                 channel.summary.decidedValue(rank, value);
                 channel.broadcast(this, new Message(success, value));
                 Debug.log(phaseName, "[leader-%d] 'success' => %d", rank, value);
-                return;
+                return;  // termina
             }
 
             if (advance() == Status.changed)
@@ -304,16 +314,15 @@ public class Node extends Thread implements Runnable {
         stato = candidate;
 
         Debug.logIf(Debug.NODE_REPAIRED, round, "%s è stato riparato!", this);
+        logIf(Debug.NODE_REPAIRED, "è stato riparato!");
 
-        // reset memoria nodo
         // TODO: cambiare il valore proposto con uno di default?
+        // reset memoria nodo
         lastValue     = value;
         proposedValue = value;
         round  = new Round(0, rank);
         commit = round.copy();
         lastRound = round.copy();
-
-        logIf(Debug.NODE_REPAIRED, "è stato riparato!");
     }
 
     /**
@@ -346,6 +355,7 @@ public class Node extends Thread implements Runnable {
         }
     }
 
+
     /**
      * Passo di computazione, con controllo dei messaggi "speciali".
      * Nell'avanzamento della computazione, il nodo può rompersi oppure cambiare stato a causa dei messaggi ricevuti.
@@ -375,7 +385,7 @@ public class Node extends Thread implements Runnable {
         // ------------------------------------------------------------------
         final List<Message> successMessages = filterMessages(success);
 
-        // QUERY-ALVE
+        // QUERY-ALIVE
         for (Message msg: filterMessages(queryAlive)) {
             channel.send(this, msg.getSender(), new Message(alive));
         }
@@ -414,6 +424,7 @@ public class Node extends Thread implements Runnable {
     }
 
     public int getRank() {
+
         return rank;
     }
 
@@ -425,7 +436,7 @@ public class Node extends Thread implements Runnable {
         return round;
     }
 
-    /** tipologia del nodo */
+    /** state of the node */
     enum State {
         leader,
         voter,
@@ -433,7 +444,7 @@ public class Node extends Thread implements Runnable {
         candidate,
     }
 
-    /** stato del nodo */
+    /** status of the node */
     enum Status {
         alive,
 //        dead,
@@ -466,18 +477,22 @@ public class Node extends Thread implements Runnable {
         return (amount >= (nodesAlive.size() + 1) / 2);
     }
 
-    /** simula l'evento di rottura di un nodo */
+    /** simulate the breaking event of a node */
     private boolean canBroke() {
         return BROKEN_RATE >= 1 + generator.nextInt(1000 * Globals.MAX_EXE_SPEED);
     }
 
-    /** simula l'evento di duplicazione dell'invio di un messaggio */
+    private boolean isElectionTimeoutExpired() {
+        return (currentTime() - deltaTime > Globals.ELECTION_TIMEOUT);
+    }
+
+    /** simulate the duplication event of a message */
     private boolean duplication() {
         int guess = 1 + generator.nextInt(100);
         return guess <= MESSAGE_DUPLICATION_RATE;
     }
 
-    /** seleziona i messagi per tipo */
+    /** get a list of messages according to the given [type] */
     private List<Message> filterMessages(Message.Type type) {
         List<Message> selected = new ArrayList<>();
 
@@ -491,7 +506,7 @@ public class Node extends Thread implements Runnable {
         return selected;
     }
 
-    /** fornisce il valore di round adatto (maggiore del valore dei round conosciuti) per il prossimo round */
+    /** get the value for the next round according to the known rounds */
     private Round nextRound() {
         if (lastRound.greaterEqual(round))
             return new Round(lastRound.getCount() + 1, this.rank);
@@ -510,12 +525,12 @@ public class Node extends Thread implements Runnable {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    // -- COSTANTS
+    // -- CONSTANTS
     //------------------------------------------------------------------------------------------------------------------
     private static final Random generator = new Random();
-    private static final String ELECTION_PHASE = "0. Fase di Elezione:";
-    private static final String LEADER_PHASE   = "1. Fase da Leader:";
-    private static final String VOTER_PHASE    = "2. Fase da Voter:";
-    private static final String BROKEN_PHASE   = "3. Fase di Rottura:";
-    private static final String SUCCESS_PHASE  = "3. Decisione:";
+    private static final String ELECTION_PHASE = "0. Election phase:";
+    private static final String LEADER_PHASE   = "1. Leader phase:";
+    private static final String VOTER_PHASE    = "2. Voter phase:";
+    private static final String BROKEN_PHASE   = "3. Broken Phase:";
+    private static final String SUCCESS_PHASE  = "4. Success phase:";
 }

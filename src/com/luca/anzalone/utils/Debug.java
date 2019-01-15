@@ -4,16 +4,16 @@ import com.sun.istack.internal.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * costanti per il debug del codice
+ * A set of constants and methods for handy logging and debugging
+ * @author Luca Anzalone
  */
 public class Debug {
-    public static boolean ENABLED = true;
-    public static boolean LOG_ALL = false;
+    // flags for logging
+    public static boolean ENABLED = true;  // enable or disable console log
+    public static boolean LOG_ALL = false; // enable all logging flags
     public static boolean MSG_RECEPTION;
     public static boolean MSG_SENDING;
     public static boolean MSG_LOST;
@@ -24,12 +24,12 @@ public class Debug {
     public static boolean NODE_DECISION;
     public static boolean LOG_OLDROUND;
     public static boolean LOG_TIMEOUT;
+    public static boolean ELECTION_TIMEOUT;
 
     // -----------------------------------------------------------------------------------------------------------------
     // -- Logging
     // -----------------------------------------------------------------------------------------------------------------
     private static final ConcurrentHashMap<String, List<String>> executionLog = new ConcurrentHashMap<>();
-    private static final Timer timer = new Timer();
 
     /** adds a new entry to [executionLog] */
     public static synchronized void log(@NotNull String name, @NotNull String format, Object...args) {
@@ -44,6 +44,7 @@ public class Debug {
         log("Round (" + round.getCount() + "):", format, args);
     }
 
+    /** log conditionally: according to a flag */
     public static void logIf(boolean flag, @NotNull String name, @NotNull String format, Object...args) {
         if (Debug.ENABLED && flag)
             log(name, format, args);
@@ -53,12 +54,14 @@ public class Debug {
         logIf(flag, "Round (" + round.getCount() + "):", format, args);
     }
 
-    /** */
+    /**
+     * shows the logs collected from all executions
+     */
     public static synchronized void printLogSummary() {
         final StringBuilder sb = new StringBuilder()
-                .append("--------------------------------------------------------------------\n")
-                .append("------------------------  Execution Summary ------------------------\n")
-                .append("--------------------------------------------------------------------\n");
+                .append("---------------------------------------------------------------------\n")
+                .append("------------------------  Executions Summary ------------------------\n")
+                .append("---------------------------------------------------------------------\n");
 
         final ArrayList<String> keys = new ArrayList<>(executionLog.keySet());
         keys.sort(String::compareTo);
@@ -67,43 +70,10 @@ public class Debug {
             sb.append(key)
               .append("\n");
 
-            executionLog.get(key).forEach(s -> {
-                sb.append("\t> ")
-                  .append(s)
-                  .append("\n");
-            });
+            executionLog.get(key).forEach(s -> sb.append("\t> ")
+              .append(s)
+              .append("\n"));
         }
-        clearConsole();
         System.out.println(sb.toString());
-    }
-
-    public static void startLogging(long rate) {
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                printLogSummary();
-                try {
-                    Thread.sleep(rate);
-                } catch (InterruptedException ignored) { }
-            }
-        }, rate/2, 2^32L);
-    }
-
-    public static void stopLogging() {
-        printLogSummary();
-        timer.cancel();
-        timer.purge();
-    }
-
-    private static void clearConsole() {
-        try {
-            final String os = System.getProperty("os.name");
-
-            if (os.contains("Windows"))
-                Runtime.getRuntime().exec("cls");
-            else
-                Runtime.getRuntime().exec("clear");
-
-        } catch (final Exception ignored) {}
     }
 }
