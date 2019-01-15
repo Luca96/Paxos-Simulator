@@ -1,7 +1,10 @@
 package com.luca.anzalone.utils;
 
 /**
- * Classe che rappresenta un round, identificato da una coppia (counter, id).
+ * Round object, defined as a couple (count, identifier).
+ * This kind of definition allows a total ordering relation between rounds
+ *
+ * @author Luca Anzalone
  */
 public class Round implements Comparable<Round> {
     private int count;
@@ -13,7 +16,7 @@ public class Round implements Comparable<Round> {
         this.id = id;
     }
 
-    /** aumenta il valore di [count] di 1 */
+    /** increase by 1 the [count] field */
     public Round increase() {
         this.count++;
         return this;
@@ -27,11 +30,12 @@ public class Round implements Comparable<Round> {
         return id;
     }
 
+    /** check whether the round is not-initialized */
     public boolean isEmpty() {
         return this.equals(DEFAULT);
     }
 
-    /** ritorna un round di default */
+    /** just a default round */
     public static Round empty() {
         return DEFAULT;
     }
@@ -56,12 +60,10 @@ public class Round implements Comparable<Round> {
         return 0;
     }
 
-    /** maggiore uguale di.. */
     public boolean greaterEqual(Round b) {
         return b == null || count > b.count || count == b.count && id >= b.id;
     }
 
-    /** effettua una copia dell'oggetto */
     public Round copy() {
         return new Round(count, id);
     }

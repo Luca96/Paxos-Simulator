@@ -8,6 +8,8 @@ import java.util.TreeMap;
 
 /**
  * Summary compute the statistics for a single execution
+ *
+ * @author Luca Anzalone
  */
 public class Summary {
     // messages
@@ -34,13 +36,13 @@ public class Summary {
         timeElapsed = System.currentTimeMillis() - timeElapsed;
     }
 
-    public void updateRound(@NotNull Round round) {
+    public synchronized void updateRound(@NotNull Round round) {
         if (round.getCount() > rounds)
             rounds = round.getCount();
     }
 
     /** keeps track of the decided values and if they are all the same (agreement) */
-    public void decidedValue(int rank, int value) {
+    public synchronized void decidedValue(int rank, int value) {
         decisions.put(rank, value);
         agreement = decisions.values().stream().allMatch(v -> v == value);
     }

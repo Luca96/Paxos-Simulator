@@ -12,21 +12,12 @@ import java.util.function.Consumer;
 
 /**
  * Main Class
+ *
  * @author Luca Anzalone
  */
 public class Paxos {
     private static final Scanner scanner = new Scanner(System.in);
 
-    /**
-     * Main contiene il necessario per l'avvio dell'algoritmo: settare i parametri [Globals] in accordo con la
-     * situazione che si vuole simulare (frequenza dei guasti ai nodi, e frequenza di perdita dei messaggi).
-     *
-     * L'oggetto [Channel] si occupa anche di creare ed avviare i nodi. Channel riceve in input un array di interi
-     * associati ad ogni nodo creato.
-     *
-     * [verificaAccordo] blocca il main-thread in attesa che i nodi terminino per verificare che, effettivamente, ci
-     * sia un accordo tra il valore deciso tra i nodi.
-     */
     public static void main(String[] args) {
         Logger.setLevel(Logger.DEBUG);
         title();
@@ -34,8 +25,8 @@ public class Paxos {
         // environment parameters
         Globals.CHANNEL_DELAY     = 100;
         Globals.TIMEOUT           = (Globals.CHANNEL_DELAY * 3);
-        Globals.MESSAGE_LOST_RATE = 35;
-        Globals.BROKEN_RATE       = 25;
+        Globals.MESSAGE_LOST_RATE = 30;
+        Globals.BROKEN_RATE       = 10;
         Globals.MESSAGE_DUPLICATION_RATE = 15;
         Globals.MAX_EXE_SPEED     = 10;
         Globals.BROKEN_TIME       = Globals.CHANNEL_DELAY * 4;
@@ -64,7 +55,7 @@ public class Paxos {
                     .print();
 
             prompt("\nShow the executions log? (y/n)", "y",
-                    x -> Debug.printLogSummary());
+                    x -> Debug.printExecutionsLog());
         });
 
         System.exit(0);

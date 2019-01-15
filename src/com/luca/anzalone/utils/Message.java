@@ -8,6 +8,8 @@ import java.util.TreeSet;
 
 /**
  * Messages sent across nodes
+ *
+ * @author Luca Anzalone
  */
 public class Message {
     private Type type;

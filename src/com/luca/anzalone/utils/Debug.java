@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A set of constants and methods for handy logging and debugging
+ *
  * @author Luca Anzalone
  */
 public class Debug {
@@ -57,10 +58,10 @@ public class Debug {
     /**
      * shows the logs collected from all executions
      */
-    public static synchronized void printLogSummary() {
+    public static synchronized void printExecutionsLog() {
         final StringBuilder sb = new StringBuilder()
                 .append("---------------------------------------------------------------------\n")
-                .append("------------------------  Executions Summary ------------------------\n")
+                .append("------------------------  Executions Log ----------------------------\n")
                 .append("---------------------------------------------------------------------\n");
 
         final ArrayList<String> keys = new ArrayList<>(executionLog.keySet());

@@ -5,6 +5,8 @@ import com.sun.istack.internal.NotNull;
 
 /**
  * AverageSummary is responsible to compute a set of statistics related to a set of executions
+ *
+ * @author Luca Anzalone
  */
 public class AverageSummary extends Summary {
     private int[] initialValues;

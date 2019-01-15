@@ -14,28 +14,30 @@ import java.util.logging.Logger;
 import static com.luca.anzalone.utils.Globals.*;
 
 /**
- * Corrisponde al sistema distribuito:
- * si occupa di creare ed avviare i processi,
- * di trasferire i messaggi (che possono essere perduti) - mettendo in comunicazione i nodi
+ * Channel is responsible for the creation, communication, and execution of the nodes.
+ * The messages (sent across the channel) can be lost and/or duplicated.
+ *
+ * @author Luca Anzalone
  */
-public class Channel extends Thread {
+public class Channel {
     private final Logger log = Logger.getLogger("Channel");
     private final List<Node> nodes = new ArrayList<>();
-    public final Summary summary = new Summary();
+    public  final Summary summary  = new Summary();
+
 
     public Channel(@NotNull int... values) {
         int numNodes = values.length;
         summary.totalNodes = numNodes;
 
-        // creazione dei nodi
+        // creating nodes
         for (int rank = 0; rank < numNodes; ++rank) {
             nodes.add(new Node(this, rank, values[rank]));
         }
     }
 
-    /** avvia i nodi */
+    /** starts each node */
     public Channel launch() {
-        summary.startTime();
+        summary.startTime();  // take the initial time
 
         for (Node node: nodes)
             node.start();
@@ -43,47 +45,25 @@ public class Channel extends Thread {
         return this;
     }
 
-    /** attende la terminazione dei nodi, dopo la quale esegue una [callback] */
-    public void onTermination(Consumer<Channel> callback) {
+    /** execute the given [callback] after all nodes execution are terminated */
+    public void onTermination(@NotNull Consumer<Channel> callback) {
         for (Node node: nodes) {
-            try {
-                node.join();
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            try { node.join(); } catch (InterruptedException ignored) { }
         }
 
         callback.accept(this);
     }
 
-    /**
-     * verifica che ogni nodo abbia deciso lo stesso valore
-     * @return [true]: se l'accordo è verificato, [false] altrimenti.
-     */
-    public boolean verificaAccordo() {
-        int value = nodes.get(0).getValue();
-
-        for (int i = 1; i < nodes.size(); ++i) {
-            if (value != nodes.get(i).getValue())
-                return false;
-        }
-
-        return true;
-    }
-
-    /** invia un messaggio lungo il canale */
+    /** sends a [message] across the simulated communication channel */
     public void send(@NotNull Node from, int to, @NotNull Message message) {
         assert to < nodes.size();
 
-        new Thread(new SenderRunnable(from, to, message))
+        new SenderThread(from, to, message)
                 .start();
     }
 
-    /** Invia il messaggio a tutti i nodi: opzionalmente esclude se stesso. */
+    /** broadcasts the given [message] */
     public void broadcast(@NotNull Node from, @NotNull Message message, boolean sendToMe) {
-//        log.warning("nodo: " + from.getRank() + " broadcast [" + message.getType() + "]");
-
         for (Node node: nodes) {
             if (!sendToMe && from.equals(node))
                 continue;
@@ -97,15 +77,17 @@ public class Channel extends Thread {
         broadcast(from, message, false);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+
     /**
-     * Runnable per rendere l'operazione di send non-bloccante
+     * Makes the send operation non-blocking (async)
      */
-    private class SenderRunnable implements Runnable {
+    private class SenderThread extends Thread {
         private final Node from;
         private final int to;
         private final Message message;
 
-        SenderRunnable(final Node from, final int to, final Message message) {
+        SenderThread(final Node from, final int to, final Message message) {
             this.from = from;
             this.to = to;
             this.message = message;
@@ -119,7 +101,7 @@ public class Channel extends Thread {
         public void run() {
             final Node receiver = nodes.get(to);
 
-            // applica il delay (e perdite) della rete solo se receiver != sender
+            // apply network delay and errors only if receiver != sender
             if (from.getRank() != receiver.getRank()) {
                 if (channelError()) {
                     summary.lostMessages++;
@@ -133,25 +115,26 @@ public class Channel extends Thread {
 
             receiver.receive(message);
         }
+
+        /** simulate the network (communication) delay */
+        private void sendDelay() {
+            final Random generator = new Random();
+
+            try {
+                sleep(generator.nextInt(1 + CHANNEL_DELAY));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    /** simulate an error on the channel (with sudden lost of a message) */
     private boolean channelError() {
         final Random generator = new Random();
         int guess = 1 + generator.nextInt(100);
 
         return guess <= MESSAGE_LOST_RATE;
-    }
-
-    /** simula il ritardo della rete */
-    private void sendDelay() {
-        final Random generator = new Random();
-
-        try {
-            sleep(generator.nextInt(1 + CHANNEL_DELAY));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private void logIf(boolean flag, final String format, Object...args) {

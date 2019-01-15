@@ -8,6 +8,7 @@ import com.sun.istack.internal.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Logger;
 
 import static com.luca.anzalone.utils.Globals.*;
@@ -15,21 +16,27 @@ import static com.luca.anzalone.utils.Message.Type.*;
 import static com.luca.anzalone.Node.State.*;
 
 /**
- * Classe che manipola i nodi all'interno del sistema distribuito
+ * The Node class simulated a distributed node.
+ *
+ * A node i capable of reading, sending and storing messages across the [channel].
+ * In the execution of the node program, the logic round (or computation step) is represented by the advance method.
+ * At any computation step, the node can be subject to a breaking.
+ * After a defined amount [Globals.BROKEN_TIME] of time, the node can be repaired.
+ *
+ * @author Luca Anzalone
  */
 public class Node extends Thread implements Runnable {
-    private int rank;                 // identificatore univoco del nodo
-    private int value;                // valore iniziale del nodo
-    private int exeSpeed;             // velocità di esecuzione simulata di un nodo (clock)
-    private State stato = candidate;  // inizialmente i nodi sono dei candidati per l'elezione
+    private int rank;                 // unique identifier
+    private int value;                // initial value assigned to the node
+    private int exeSpeed;             // simulated execution speed
+    private State stato = candidate;  // the state of the node at any time
     private boolean decision = false;
-    private TreeSet<Integer> nodesAlive = new TreeSet<>();  // tiene traccia dei noti partecipanti
     private final Channel channel;
     private final Logger log;
-    private final ConcurrentLinkedQueue<Message> messageQueue = new ConcurrentLinkedQueue<>();
-
+    private final Queue<Message> messageQueue = new ConcurrentLinkedQueue<>();
+    private final Set<Integer> nodesAlive     = new ConcurrentSkipListSet<>();  // keep track of the alive nodes
     //-----------------------------------------------------
-    private Round round;  // round corrente
+    private Round round;  // current round
     private Round commit;
     private Round lastRound;
     private int lastValue;
@@ -38,10 +45,11 @@ public class Node extends Thread implements Runnable {
     //-----------------------------------------------------
 
     /**
-     * Crea un processore (nodo)
-     * @param channel: canale di comunicazione
-     * @param rank: identificatore univoco del processore
-     * @param v: valore associato al processore (cioè quello da proporre)
+     * Creates a node.
+     *
+     * @param channel: communication channel
+     * @param rank: unique identifier (id)
+     * @param v: the value that the node try to propose
      */
     Node(@NotNull final Channel channel, int rank, int v) {
         super("Node-" + rank);
@@ -62,8 +70,7 @@ public class Node extends Thread implements Runnable {
 
     @Override
     public void run() {
-        // take initial execution time
-        deltaTime = currentTime();
+        deltaTime = currentTime();  // take initial execution time
 
         while (!decision) {
             switch (stato) {
@@ -98,20 +105,16 @@ public class Node extends Thread implements Runnable {
         Debug.logIf(Debug.NODE_STATE, round, toString());
     }
 
-    /**
-     * Fase da voter:
-     * Il voter, ad ogni passo di computazione, controlla l'eventuale ricezione di messaggi success, collect e begin.
-     *
-     * Se riceve success (e tutti i messaggi sono concordanti - stesso valore deciso) deciderà e si fermerà.
-     *
-     * Se non riceve messaggi collect e begin per un certo periodo di tempo, controllerà lo stato di vita del leader.
-     * Se il leader non risponde con una conferma (alive) entro il timeout, il nodo comunicherà in broadcast la
-     * necessità di iniziare una nuova elezione.
+
+    /***
+     * The voter phase is divided into 2 more phases:
+     *   - phase 1: reading collect messages, communicating the [lastRound] and [lastValue];
+     *   - phase 2: reading begin messages, accepting the received value according to [commit]
      */
     private void voterPhase() {
         final String phaseName = "Round-voter (" + round.getCount() + "):";
 
-        // se ricevo collect...
+        // consuming collect messages
         filterMessages(collect).forEach(msg -> {
             final Round r = msg.getR1();
             final int sender = msg.getSender();
@@ -129,7 +132,7 @@ public class Node extends Thread implements Runnable {
             }
         });
 
-        // se ricevo begin...
+        // consuming begin messages
         filterMessages(begin).forEach(msg -> {
             final Round r = msg.getR1();
             final int v   = msg.getValue();
@@ -150,26 +153,24 @@ public class Node extends Thread implements Runnable {
 
 
     /**
-     * Fase da leader:
-     * Il leader invia i messaggi collect per conoscere i valori degli altri nodi (che risponderanno con last).
-     * Tiene traccia del valore associato all'[r] più grande.
+     * The Leader phase:
+     *   - part 1: collecting a majority of values
+     *   - part 2: propose a value, and, then confirming its acceptation by the others
      *
-     * Ricevuta una maggioranza, decidera proprio per quel valore - solo se una maggioranza lo accetterà.
-     * Raggiunto il successo (la decisione), questa sarà comunicata in broadcast a tutti i nodi partecipanti.
-     *
-     * Il leader, dopo il successo, attenderà gli ack per due timeout. Dopo il quale terminerà.
+     * The reception of [old-round] messages cause the current leader to lost its "leading" and became a voter.
+     * The leader is, at the same time, a voter. Thus, the [collect] and [begin] messages are sent to itself.
      */
     private void leaderPhase() {
         final String phaseName = "Round-leader (" + round.getCount() + "):";
         round = nextRound();
         channel.summary.updateRound(round);
 
-        // -- fase 1
+        // -- phase 1
         // -------------------------------------------------
         channel.broadcast(this, new Message(collect, round), true);
         Debug.log(phaseName, "[leader-%d] collect", rank);
 
-        // aspetta messaggi last
+        // wait a majority of last messages
         long last_timeout = currentTime() + TIMEOUT;
         final Set<Integer> lastCount = new TreeSet<>();
         boolean last_majority = false;
@@ -187,7 +188,7 @@ public class Node extends Thread implements Runnable {
             final List<Message> lastMessages = filterMessages(last);
             lastCount.addAll(Message.uniqueSenders(lastMessages));
 
-            // considera il valore [v] associato al [round] più grande
+            // cosider the value of [v] associated to the biggest [round]
             for (Message msg: lastMessages) {
                 final Round r = msg.getR1();
 
@@ -207,18 +208,18 @@ public class Node extends Thread implements Runnable {
         }
 
         if (!last_majority) {
+            // no last-majority, so start another round
             logIf(Debug.LOG_TIMEOUT, "TIMEOUT EXPIRED! -- nessuna maggioranza di [last]");
             Debug.log(phaseName, "[leader-%d] last timeout expired", rank);
-            return;   // nessuna maggiornanza di last, inizia un nuovo round
+            return;
         }
 
-        // -- fase 2
+        // -- phase 2
         // -------------------------------------------------
-        // spedisci begin
         channel.broadcast(this, new Message(begin, round, proposedValue), true);
         Debug.log(phaseName, "[leader-%d] begin", rank);
 
-        // aspetta una maggioranza di accept
+        // wait a majority of accept messages
         long accept_timeout = currentTime() + TIMEOUT;
         final Set<Integer> acceptCount = new TreeSet<>();
 
@@ -236,13 +237,13 @@ public class Node extends Thread implements Runnable {
             acceptCount.addAll(Message.uniqueSenders(acceptMessages));
 
             if (majority(acceptCount.size())) {
-                // c'è una decisione!
+                // there's a decision!
                 decision = true;
                 value = proposedValue;
                 channel.summary.decidedValue(rank, value);
                 channel.broadcast(this, new Message(success, value));
                 Debug.log(phaseName, "[leader-%d] 'success' => %d", rank, value);
-                return;  // termina
+                return;  // terminate
             }
 
             if (advance() == Status.changed)
@@ -254,15 +255,11 @@ public class Node extends Thread implements Runnable {
 
 
     /**
-     * Fase di elezione:
-     * Un nodo sceglie un processore da eleggere, selezionando un rank da (0, numNodes - 1).
-     * Il valore scelto è comunicato a tutti (broadcast).
+     * The Election phase:
+     * Every node (alive - not broken) sends a [query-alive] message in order to know the participants.
+     * The leader became the node with the lowest rank (according to the known nodes by each of them).
      *
-     * Ogni nodo si appresta a ricevere una maggioranza di messaggi [election], tenendo traccia, di volta in volta, del
-     * massimo valore di [rank] ricevuto.
-     *
-     * Il leader sarà quel nodo che avrà ricevuto una maggiornanza di messaggi [election],
-     * tale che rank(nodo) = max(rank, election).
+     * Is possible, due to a lost of messages, that one or more nodes became leader.
      */
     private void electionPhase() {
         final String phaseName = "Round-election (" + round.getCount() + "):";
@@ -272,7 +269,7 @@ public class Node extends Thread implements Runnable {
         nodesAlive.add(rank);
         Debug.log(phaseName, "candidate-%d queryAlive", rank);
 
-        // tenta di conoscere i nodi non guasti
+        // try to know the other nodes
         channel.broadcast(this, new Message(queryAlive), true);
         int minRank = rank;
 
@@ -289,19 +286,17 @@ public class Node extends Thread implements Runnable {
                 return;
         }
 
-        // a seconda dei nodi alive, considera come leader il nodo con rank minore
+        // elect the known node with the lowest rank
         stato = (rank == minRank) ? leader : voter;
 
         Debug.log(phaseName, "elezione terminata {%s}", this);
     }
 
     /**
-     * Fase di rottura del nodo:
-     * Dopo un periodo di tempo (fissato dai parametri [Globals])
-     * il nodo viene ripristinato alla situazione iniziale [stato = candidate].
-     *
-     * Prima di ricominciare (dalla fase di elezione), il nodo tenta di conoscere il leader. Se non riesce a conoscerlo
-     * inizierà dalla fase di elezione come candidato.
+     * The Broken phase:
+     * According to [Globals.BROKEN_RATE] a node can incur into breaking.
+     * If so, the state of the node (state, known nodes, rounds and last-values) are restore.
+     * The repaired node starts again from being a candidate.
      */
     private void brokenPhase() {
         long broken_wait = currentTime() + BROKEN_TIME;
@@ -326,25 +321,24 @@ public class Node extends Thread implements Runnable {
     }
 
     /**
-     * Ricezione di un messaggio dal canale.
-     * Se il nodo è temporaneamente [broken] il messaggio non sarà salvato nel buffer [messageQueque],
-     * altrimenti (nodo funzionante) il messaggio è accodato nel buffer - per essere esaminato quando necessario.
+     * Reception of a message.
+     * Messages are received only if the node is not broken, and they are stored into a queue.
      */
     public void receive(@NotNull Message msg) {
-        // non riceve il messaggio se rotto
+        // receive messages only if not broken
         if (broken.equals(stato))
             return;
 
         logIf(Debug.MSG_RECEPTION, "message received: %s", msg);
         Debug.logIf(Debug.MSG_RECEPTION, round, "Node-%d received %s", rank, msg);
 
-        // tieni traccia dei nodi partecipanti al consenso
+        // update the known-node-set
         nodesAlive.add(msg.getSender());
 
-        // accoda
+        // enqueue the received message
         messageQueue.add(msg);
 
-        // duplicazione
+        // duplication event
         if (msg.getSender() != rank && duplication()) {
             Debug.logIf(Debug.MSG_DUPLICATED, round, "%s da [%d] a [%d] è stato duplicato!",
                     msg, msg.getSender(), rank
@@ -357,13 +351,12 @@ public class Node extends Thread implements Runnable {
 
 
     /**
-     * Passo di computazione, con controllo dei messaggi "speciali".
-     * Nell'avanzamento della computazione, il nodo può rompersi oppure cambiare stato a causa dei messaggi ricevuti.
+     * The computation step (aka logic round).
      *
-     * Controlla l'eventuale ricezione di messaggi success - in tal caso deciderà, comunicando agli altri il successo.
-     * Se leader, risponderà ad eventuali messaggi di [queryAlive] con il proprio rank.
-     * Ignora i messaggi [oldRound].
-     * E, se in elezione, controlla chi è divenuto leader.
+     * Where:
+     *   - round-independent messages are read,
+     *   - execution speed is simulated,
+     *   - and the success is spread (when received)
      */
     private Status advance() {
         delay();
@@ -381,7 +374,7 @@ public class Node extends Thread implements Runnable {
             return Status.changed;
         }
 
-        // controllo messaggi
+        // round-independent message check
         // ------------------------------------------------------------------
         final List<Message> successMessages = filterMessages(success);
 
@@ -395,13 +388,13 @@ public class Node extends Thread implements Runnable {
             int valueDecided = successMessages.get(0).getValue();
             decision = true;
             value = valueDecided;
-            channel.summary.decidedValue(rank ,value);
+            channel.summary.decidedValue(rank, value);
 
             logIf(Debug.NODE_DECISION, "ha deciso %d", value);
             Debug.log(round, "Node-%d-%s ha deciso %d", rank, stato, value);
             Debug.log(SUCCESS_PHASE, "Node-%d-%s ha deciso %d", rank, stato, value);
 
-            // diffondi, agli altri, l'avvenuto successo
+            // spread (to others) the success
             channel.broadcast(this, new Message(success, value));
 
             return Status.changed;
@@ -462,11 +455,7 @@ public class Node extends Thread implements Runnable {
     //------------------------------------------------------------------------------------------------------------------
 
     private void delay() {
-        try {
-            sleep(exeSpeed);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        try { sleep(exeSpeed); } catch (InterruptedException ignored) { }
     }
 
     private long currentTime() {

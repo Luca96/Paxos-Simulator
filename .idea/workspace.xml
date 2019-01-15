@@ -2,17 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="318ac685-7371-4cd3-ab75-11f620d5a369" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Channel$SenderRunnable.class" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Channel.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Channel.class" />
       <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Node$1.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Node$1.class" />
       <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Node$State.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Node$State.class" />
       <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Node$Status.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Node$Status.class" />
       <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Node.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Node.class" />
       <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Paxos.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/Paxos.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/stats/AverageSummary.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/stats/AverageSummary.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/stats/Summary.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/stats/Summary.class" />
       <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Debug$1.class" afterPath="" />
       <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Debug.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Debug.class" />
       <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Globals.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Globals.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Message$1.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Message$1.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Message$Type.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Message$Type.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Message.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Message.class" />
       <change beforePath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Round.class" afterPath="$PROJECT_DIR$/out/production/Paxos/com/luca/anzalone/utils/Round.class" />
+      <change beforePath="$PROJECT_DIR$/src/com/luca/anzalone/Channel.java" afterPath="$PROJECT_DIR$/src/com/luca/anzalone/Channel.java" />
       <change beforePath="$PROJECT_DIR$/src/com/luca/anzalone/Node.java" afterPath="$PROJECT_DIR$/src/com/luca/anzalone/Node.java" />
       <change beforePath="$PROJECT_DIR$/src/com/luca/anzalone/Paxos.java" afterPath="$PROJECT_DIR$/src/com/luca/anzalone/Paxos.java" />
       <change beforePath="$PROJECT_DIR$/src/com/luca/anzalone/stats/AverageSummary.java" afterPath="$PROJECT_DIR$/src/com/luca/anzalone/stats/AverageSummary.java" />
@@ -35,15 +42,15 @@
       <file leaf-file-name="Debug.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/utils/Debug.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+            <state relative-caret-position="72">
+              <caret line="10" column="2" lean-forward="false" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#log#0;class#Debug#0" expanded="false" />
                 <element signature="method#log#1;class#Debug#0" expanded="false" />
                 <element signature="method#logIf#0;class#Debug#0" expanded="false" />
                 <element signature="method#logIf#1;class#Debug#0" expanded="false" />
-                <element signature="method#printLogSummary#0;class#Debug#0" expanded="false" />
+                <element signature="method#printExecutionsLog#0;class#Debug#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -52,8 +59,8 @@
       <file leaf-file-name="Globals.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/utils/Globals.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+            <state relative-caret-position="72">
+              <caret line="4" column="2" lean-forward="false" selection-start-line="4" selection-start-column="2" selection-end-line="4" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -62,8 +69,8 @@
       <file leaf-file-name="Paxos.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/Paxos.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="774">
-              <caret line="45" column="37" lean-forward="true" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
+            <state relative-caret-position="342">
+              <caret line="27" column="38" lean-forward="false" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#prompt#0;class#Paxos#0" expanded="false" />
@@ -76,19 +83,15 @@
       <file leaf-file-name="Channel.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/Channel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="900">
-              <caret line="146" column="29" lean-forward="true" selection-start-line="146" selection-start-column="29" selection-end-line="146" selection-end-column="29" />
+            <state relative-caret-position="324">
+              <caret line="18" column="2" lean-forward="false" selection-start-line="18" selection-start-column="2" selection-end-line="18" selection-end-column="2" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#launch#0;class#Channel#0" expanded="false" />
                 <element signature="method#onTermination#0;class#Channel#0" expanded="false" />
-                <element signature="method#verificaAccordo#0;class#Channel#0" expanded="false" />
-                <element signature="method#send#0;class#Channel#0" expanded="false" />
                 <element signature="method#broadcast#0;class#Channel#0" expanded="false" />
-                <element signature="class#SenderRunnable#0;class#Channel#0" expanded="false" />
-                <element signature="method#run#0;class#SenderRunnable#0;class#Channel#0" expanded="false" />
+                <element signature="class#SenderThread#0;class#Channel#0" expanded="false" />
                 <element signature="method#channelError#0;class#Channel#0" expanded="false" />
-                <element signature="method#sendDelay#0;class#Channel#0" expanded="false" />
                 <element signature="method#logIf#0;class#Channel#0" expanded="false" />
               </folding>
             </state>
@@ -98,8 +101,8 @@
       <file leaf-file-name="Node.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/Node.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2088">
-              <caret line="367" column="29" lean-forward="true" selection-start-line="367" selection-start-column="29" selection-end-line="367" selection-end-column="29" />
+            <state relative-caret-position="450">
+              <caret line="25" column="24" lean-forward="false" selection-start-line="25" selection-start-column="24" selection-end-line="25" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#Node#0;class#Node#0" expanded="false" />
@@ -109,23 +112,34 @@
                 <element signature="method#electionPhase#0;class#Node#0" expanded="false" />
                 <element signature="method#brokenPhase#0;class#Node#0" expanded="false" />
                 <element signature="method#receive#0;class#Node#0" expanded="false" />
+                <element signature="method#advance#0;class#Node#0" expanded="false" />
                 <element signature="method#equals#0;class#Node#0" expanded="false" />
-                <element signature="e#15282#15283#0" expanded="true" />
-                <element signature="e#15310#15311#0" expanded="true" />
-                <element signature="e#15341#15342#0" expanded="true" />
-                <element signature="e#15369#15370#0" expanded="true" />
+                <element signature="e#14449#14450#0" expanded="true" />
+                <element signature="e#14477#14478#0" expanded="true" />
+                <element signature="e#14508#14509#0" expanded="true" />
+                <element signature="e#14536#14537#0" expanded="true" />
                 <element signature="class#Status#0;class#Node#0" expanded="false" />
                 <element signature="method#toString#0;class#Node#0" expanded="false" />
-                <element signature="method#delay#0;class#Node#0" expanded="false" />
-                <element signature="e#16269#16270#0" expanded="true" />
-                <element signature="e#16328#16329#0" expanded="true" />
-                <element signature="e#16372#16373#0" expanded="true" />
-                <element signature="e#16434#16435#0" expanded="true" />
                 <element signature="method#duplication#0;class#Node#0" expanded="false" />
                 <element signature="method#filterMessages#0;class#Node#0" expanded="false" />
                 <element signature="method#nextRound#0;class#Node#0" expanded="false" />
                 <element signature="method#log#0;class#Node#0" expanded="false" />
                 <element signature="method#logIf#0;class#Node#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AverageSummary.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/stats/AverageSummary.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="16" column="46" lean-forward="true" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="46" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#calculate#0;class#AverageSummary#0" expanded="false" />
+                <element signature="method#percentage#0;class#AverageSummary#0" expanded="false" />
+                <element signature="method#toString#0;class#AverageSummary#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -176,14 +190,14 @@
         <option value="$PROJECT_DIR$/src/com/luca/anzalone/stats/ExecutionSummary.java" />
         <option value="$PROJECT_DIR$/src/com/luca/anzalone/stats/GlobalSummary.java" />
         <option value="$PROJECT_DIR$/src/com/luca/anzalone/Channel.java" />
-        <option value="$PROJECT_DIR$/src/com/luca/anzalone/utils/Round.java" />
         <option value="$PROJECT_DIR$/src/com/luca/anzalone/utils/Debug.java" />
         <option value="$PROJECT_DIR$/src/com/luca/anzalone/utils/Globals.java" />
-        <option value="$PROJECT_DIR$/src/com/luca/anzalone/Paxos.java" />
-        <option value="$PROJECT_DIR$/src/com/luca/anzalone/stats/AverageSummary.java" />
-        <option value="$PROJECT_DIR$/src/com/luca/anzalone/stats/Summary.java" />
         <option value="$PROJECT_DIR$/src/com/luca/anzalone/utils/Message.java" />
         <option value="$PROJECT_DIR$/src/com/luca/anzalone/Node.java" />
+        <option value="$PROJECT_DIR$/src/com/luca/anzalone/stats/Summary.java" />
+        <option value="$PROJECT_DIR$/src/com/luca/anzalone/stats/AverageSummary.java" />
+        <option value="$PROJECT_DIR$/src/com/luca/anzalone/utils/Round.java" />
+        <option value="$PROJECT_DIR$/src/com/luca/anzalone/Paxos.java" />
       </list>
     </option>
   </component>
@@ -221,7 +235,6 @@
     <panes>
       <pane id="Scratches" />
       <pane id="AndroidView" />
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -259,6 +272,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -369,12 +383,21 @@
       <workItem from="1547403957060" duration="3987000" />
       <workItem from="1547474707650" duration="7117000" />
       <workItem from="1547497953649" duration="6768000" />
-      <workItem from="1547545006012" duration="5852000" />
+      <workItem from="1547545006012" duration="5964000" />
+      <workItem from="1547577186252" duration="4270000" />
     </task>
+    <task id="LOCAL-00001" summary="introduced ELECTION_TIMEOUT parameter">
+      <created>1547552312473</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1547552312473</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="114762000" />
+    <option name="totallyTimeSpent" value="119144000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1053" extended-state="6" />
@@ -386,10 +409,10 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32976446" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="true" show_stripe_button="true" weight="0.724359" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="321" y="17" width="1277" height="1003" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.724359" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="3201" y="33" width="1278" height="1003" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -415,6 +438,10 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="introduced ELECTION_TIMEOUT parameter" />
+    <option name="LAST_COMMIT_MESSAGE" value="introduced ELECTION_TIMEOUT parameter" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <option name="time" value="29" />
@@ -422,38 +449,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/Paxos.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="5" lean-forward="true" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#prompt#0;class#Paxos#0" expanded="false" />
-            <element signature="method#title#0;class#Paxos#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/Channel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="41" column="16" lean-forward="false" selection-start-line="41" selection-start-column="16" selection-end-line="41" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#launch#0;class#Channel#0" expanded="false" />
-            <element signature="method#onTermination#0;class#Channel#0" expanded="false" />
-            <element signature="method#verificaAccordo#0;class#Channel#0" expanded="false" />
-            <element signature="method#send#0;class#Channel#0" expanded="false" />
-            <element signature="method#broadcast#0;class#Channel#0" expanded="false" />
-            <element signature="class#SenderRunnable#0;class#Channel#0" expanded="false" />
-            <element signature="method#run#0;class#SenderRunnable#0;class#Channel#0" expanded="false" />
-            <element signature="method#channelError#0;class#Channel#0" expanded="false" />
-            <element signature="method#sendDelay#0;class#Channel#0" expanded="false" />
-            <element signature="method#logIf#0;class#Channel#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/utils/Message.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1404">
@@ -464,8 +459,10 @@
             <element signature="method#getR2#0;class#Message#0" expanded="false" />
             <element signature="method#copy#0;class#Message#0" expanded="false" />
             <element signature="method#uniqueSenders#0;class#Message#0" expanded="false" />
+            <element signature="class#Type#0;class#Message#0" expanded="false" />
             <element signature="method#equals#0;class#Message#0" expanded="false" />
             <element signature="method#hashCode#0;class#Message#0" expanded="false" />
+            <element signature="method#toString#0;class#Message#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -483,18 +480,14 @@
             <element signature="method#electionPhase#0;class#Node#0" expanded="false" />
             <element signature="method#brokenPhase#0;class#Node#0" expanded="false" />
             <element signature="method#receive#0;class#Node#0" expanded="false" />
+            <element signature="method#advance#0;class#Node#0" expanded="false" />
             <element signature="method#equals#0;class#Node#0" expanded="false" />
-            <element signature="e#15282#15283#0" expanded="true" />
-            <element signature="e#15310#15311#0" expanded="true" />
-            <element signature="e#15341#15342#0" expanded="true" />
-            <element signature="e#15369#15370#0" expanded="true" />
+            <element signature="e#14449#14450#0" expanded="true" />
+            <element signature="e#14477#14478#0" expanded="true" />
+            <element signature="e#14508#14509#0" expanded="true" />
+            <element signature="e#14536#14537#0" expanded="true" />
             <element signature="class#Status#0;class#Node#0" expanded="false" />
             <element signature="method#toString#0;class#Node#0" expanded="false" />
-            <element signature="method#delay#0;class#Node#0" expanded="false" />
-            <element signature="e#16269#16270#0" expanded="true" />
-            <element signature="e#16328#16329#0" expanded="true" />
-            <element signature="e#16372#16373#0" expanded="true" />
-            <element signature="e#16434#16435#0" expanded="true" />
             <element signature="method#duplication#0;class#Node#0" expanded="false" />
             <element signature="method#filterMessages#0;class#Node#0" expanded="false" />
             <element signature="method#nextRound#0;class#Node#0" expanded="false" />
@@ -532,13 +525,9 @@
             <element signature="imports" expanded="true" />
             <element signature="method#launch#0;class#Channel#0" expanded="false" />
             <element signature="method#onTermination#0;class#Channel#0" expanded="false" />
-            <element signature="method#verificaAccordo#0;class#Channel#0" expanded="false" />
-            <element signature="method#send#0;class#Channel#0" expanded="false" />
             <element signature="method#broadcast#0;class#Channel#0" expanded="false" />
-            <element signature="class#SenderRunnable#0;class#Channel#0" expanded="false" />
-            <element signature="method#run#0;class#SenderRunnable#0;class#Channel#0" expanded="false" />
+            <element signature="class#SenderThread#0;class#Channel#0" expanded="false" />
             <element signature="method#channelError#0;class#Channel#0" expanded="false" />
-            <element signature="method#sendDelay#0;class#Channel#0" expanded="false" />
             <element signature="method#logIf#0;class#Channel#0" expanded="false" />
           </folding>
         </state>
@@ -554,8 +543,10 @@
             <element signature="method#getR2#0;class#Message#0" expanded="false" />
             <element signature="method#copy#0;class#Message#0" expanded="false" />
             <element signature="method#uniqueSenders#0;class#Message#0" expanded="false" />
+            <element signature="class#Type#0;class#Message#0" expanded="false" />
             <element signature="method#equals#0;class#Message#0" expanded="false" />
             <element signature="method#hashCode#0;class#Message#0" expanded="false" />
+            <element signature="method#toString#0;class#Message#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -573,18 +564,14 @@
             <element signature="method#electionPhase#0;class#Node#0" expanded="false" />
             <element signature="method#brokenPhase#0;class#Node#0" expanded="false" />
             <element signature="method#receive#0;class#Node#0" expanded="false" />
+            <element signature="method#advance#0;class#Node#0" expanded="false" />
             <element signature="method#equals#0;class#Node#0" expanded="false" />
-            <element signature="e#15282#15283#0" expanded="true" />
-            <element signature="e#15310#15311#0" expanded="true" />
-            <element signature="e#15341#15342#0" expanded="true" />
-            <element signature="e#15369#15370#0" expanded="true" />
+            <element signature="e#14449#14450#0" expanded="true" />
+            <element signature="e#14477#14478#0" expanded="true" />
+            <element signature="e#14508#14509#0" expanded="true" />
+            <element signature="e#14536#14537#0" expanded="true" />
             <element signature="class#Status#0;class#Node#0" expanded="false" />
             <element signature="method#toString#0;class#Node#0" expanded="false" />
-            <element signature="method#delay#0;class#Node#0" expanded="false" />
-            <element signature="e#16269#16270#0" expanded="true" />
-            <element signature="e#16328#16329#0" expanded="true" />
-            <element signature="e#16372#16373#0" expanded="true" />
-            <element signature="e#16434#16435#0" expanded="true" />
             <element signature="method#duplication#0;class#Node#0" expanded="false" />
             <element signature="method#filterMessages#0;class#Node#0" expanded="false" />
             <element signature="method#nextRound#0;class#Node#0" expanded="false" />
@@ -622,13 +609,9 @@
             <element signature="imports" expanded="true" />
             <element signature="method#launch#0;class#Channel#0" expanded="false" />
             <element signature="method#onTermination#0;class#Channel#0" expanded="false" />
-            <element signature="method#verificaAccordo#0;class#Channel#0" expanded="false" />
-            <element signature="method#send#0;class#Channel#0" expanded="false" />
             <element signature="method#broadcast#0;class#Channel#0" expanded="false" />
-            <element signature="class#SenderRunnable#0;class#Channel#0" expanded="false" />
-            <element signature="method#run#0;class#SenderRunnable#0;class#Channel#0" expanded="false" />
+            <element signature="class#SenderThread#0;class#Channel#0" expanded="false" />
             <element signature="method#channelError#0;class#Channel#0" expanded="false" />
-            <element signature="method#sendDelay#0;class#Channel#0" expanded="false" />
             <element signature="method#logIf#0;class#Channel#0" expanded="false" />
           </folding>
         </state>
@@ -644,8 +627,10 @@
             <element signature="method#getR2#0;class#Message#0" expanded="false" />
             <element signature="method#copy#0;class#Message#0" expanded="false" />
             <element signature="method#uniqueSenders#0;class#Message#0" expanded="false" />
+            <element signature="class#Type#0;class#Message#0" expanded="false" />
             <element signature="method#equals#0;class#Message#0" expanded="false" />
             <element signature="method#hashCode#0;class#Message#0" expanded="false" />
+            <element signature="method#toString#0;class#Message#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -663,18 +648,14 @@
             <element signature="method#electionPhase#0;class#Node#0" expanded="false" />
             <element signature="method#brokenPhase#0;class#Node#0" expanded="false" />
             <element signature="method#receive#0;class#Node#0" expanded="false" />
+            <element signature="method#advance#0;class#Node#0" expanded="false" />
             <element signature="method#equals#0;class#Node#0" expanded="false" />
-            <element signature="e#15282#15283#0" expanded="true" />
-            <element signature="e#15310#15311#0" expanded="true" />
-            <element signature="e#15341#15342#0" expanded="true" />
-            <element signature="e#15369#15370#0" expanded="true" />
+            <element signature="e#14449#14450#0" expanded="true" />
+            <element signature="e#14477#14478#0" expanded="true" />
+            <element signature="e#14508#14509#0" expanded="true" />
+            <element signature="e#14536#14537#0" expanded="true" />
             <element signature="class#Status#0;class#Node#0" expanded="false" />
             <element signature="method#toString#0;class#Node#0" expanded="false" />
-            <element signature="method#delay#0;class#Node#0" expanded="false" />
-            <element signature="e#16269#16270#0" expanded="true" />
-            <element signature="e#16328#16329#0" expanded="true" />
-            <element signature="e#16372#16373#0" expanded="true" />
-            <element signature="e#16434#16435#0" expanded="true" />
             <element signature="method#duplication#0;class#Node#0" expanded="false" />
             <element signature="method#filterMessages#0;class#Node#0" expanded="false" />
             <element signature="method#nextRound#0;class#Node#0" expanded="false" />
@@ -704,13 +685,9 @@
             <element signature="imports" expanded="true" />
             <element signature="method#launch#0;class#Channel#0" expanded="false" />
             <element signature="method#onTermination#0;class#Channel#0" expanded="false" />
-            <element signature="method#verificaAccordo#0;class#Channel#0" expanded="false" />
-            <element signature="method#send#0;class#Channel#0" expanded="false" />
             <element signature="method#broadcast#0;class#Channel#0" expanded="false" />
-            <element signature="class#SenderRunnable#0;class#Channel#0" expanded="false" />
-            <element signature="method#run#0;class#SenderRunnable#0;class#Channel#0" expanded="false" />
+            <element signature="class#SenderThread#0;class#Channel#0" expanded="false" />
             <element signature="method#channelError#0;class#Channel#0" expanded="false" />
-            <element signature="method#sendDelay#0;class#Channel#0" expanded="false" />
             <element signature="method#logIf#0;class#Channel#0" expanded="false" />
           </folding>
         </state>
@@ -726,8 +703,10 @@
             <element signature="method#getR2#0;class#Message#0" expanded="false" />
             <element signature="method#copy#0;class#Message#0" expanded="false" />
             <element signature="method#uniqueSenders#0;class#Message#0" expanded="false" />
+            <element signature="class#Type#0;class#Message#0" expanded="false" />
             <element signature="method#equals#0;class#Message#0" expanded="false" />
             <element signature="method#hashCode#0;class#Message#0" expanded="false" />
+            <element signature="method#toString#0;class#Message#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -745,18 +724,14 @@
             <element signature="method#electionPhase#0;class#Node#0" expanded="false" />
             <element signature="method#brokenPhase#0;class#Node#0" expanded="false" />
             <element signature="method#receive#0;class#Node#0" expanded="false" />
+            <element signature="method#advance#0;class#Node#0" expanded="false" />
             <element signature="method#equals#0;class#Node#0" expanded="false" />
-            <element signature="e#15282#15283#0" expanded="true" />
-            <element signature="e#15310#15311#0" expanded="true" />
-            <element signature="e#15341#15342#0" expanded="true" />
-            <element signature="e#15369#15370#0" expanded="true" />
+            <element signature="e#14449#14450#0" expanded="true" />
+            <element signature="e#14477#14478#0" expanded="true" />
+            <element signature="e#14508#14509#0" expanded="true" />
+            <element signature="e#14536#14537#0" expanded="true" />
             <element signature="class#Status#0;class#Node#0" expanded="false" />
             <element signature="method#toString#0;class#Node#0" expanded="false" />
-            <element signature="method#delay#0;class#Node#0" expanded="false" />
-            <element signature="e#16269#16270#0" expanded="true" />
-            <element signature="e#16328#16329#0" expanded="true" />
-            <element signature="e#16372#16373#0" expanded="true" />
-            <element signature="e#16434#16435#0" expanded="true" />
             <element signature="method#duplication#0;class#Node#0" expanded="false" />
             <element signature="method#filterMessages#0;class#Node#0" expanded="false" />
             <element signature="method#nextRound#0;class#Node#0" expanded="false" />
@@ -791,18 +766,14 @@
             <element signature="method#electionPhase#0;class#Node#0" expanded="false" />
             <element signature="method#brokenPhase#0;class#Node#0" expanded="false" />
             <element signature="method#receive#0;class#Node#0" expanded="false" />
+            <element signature="method#advance#0;class#Node#0" expanded="false" />
             <element signature="method#equals#0;class#Node#0" expanded="false" />
-            <element signature="e#15282#15283#0" expanded="true" />
-            <element signature="e#15310#15311#0" expanded="true" />
-            <element signature="e#15341#15342#0" expanded="true" />
-            <element signature="e#15369#15370#0" expanded="true" />
+            <element signature="e#14449#14450#0" expanded="true" />
+            <element signature="e#14477#14478#0" expanded="true" />
+            <element signature="e#14508#14509#0" expanded="true" />
+            <element signature="e#14536#14537#0" expanded="true" />
             <element signature="class#Status#0;class#Node#0" expanded="false" />
             <element signature="method#toString#0;class#Node#0" expanded="false" />
-            <element signature="method#delay#0;class#Node#0" expanded="false" />
-            <element signature="e#16269#16270#0" expanded="true" />
-            <element signature="e#16328#16329#0" expanded="true" />
-            <element signature="e#16372#16373#0" expanded="true" />
-            <element signature="e#16434#16435#0" expanded="true" />
             <element signature="method#duplication#0;class#Node#0" expanded="false" />
             <element signature="method#filterMessages#0;class#Node#0" expanded="false" />
             <element signature="method#nextRound#0;class#Node#0" expanded="false" />
@@ -820,13 +791,9 @@
             <element signature="imports" expanded="true" />
             <element signature="method#launch#0;class#Channel#0" expanded="false" />
             <element signature="method#onTermination#0;class#Channel#0" expanded="false" />
-            <element signature="method#verificaAccordo#0;class#Channel#0" expanded="false" />
-            <element signature="method#send#0;class#Channel#0" expanded="false" />
             <element signature="method#broadcast#0;class#Channel#0" expanded="false" />
-            <element signature="class#SenderRunnable#0;class#Channel#0" expanded="false" />
-            <element signature="method#run#0;class#SenderRunnable#0;class#Channel#0" expanded="false" />
+            <element signature="class#SenderThread#0;class#Channel#0" expanded="false" />
             <element signature="method#channelError#0;class#Channel#0" expanded="false" />
-            <element signature="method#sendDelay#0;class#Channel#0" expanded="false" />
             <element signature="method#logIf#0;class#Channel#0" expanded="false" />
           </folding>
         </state>
@@ -910,14 +877,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/lang/Thread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="300" column="30" lean-forward="false" selection-start-line="300" selection-start-column="30" selection-end-line="300" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/concurrent/ConcurrentHashMap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="294">
@@ -976,40 +935,116 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/utils/Round.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/lang/Thread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+        <state relative-caret-position="464">
+          <caret line="300" column="30" lean-forward="false" selection-start-line="300" selection-start-column="30" selection-end-line="300" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/concurrent/ConcurrentSkipListSet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="410">
+          <caret line="110" column="11" lean-forward="false" selection-start-line="110" selection-start-column="11" selection-end-line="110" selection-end-column="11" />
           <folding>
-            <element signature="method#Round#0;class#Round#0" expanded="false" />
-            <element signature="e#550#551#0" expanded="true" />
-            <element signature="e#578#579#0" expanded="true" />
-            <element signature="e#604#605#0" expanded="true" />
-            <element signature="e#629#630#0" expanded="true" />
-            <element signature="e#661#662#0" expanded="true" />
-            <element signature="e#704#705#0" expanded="true" />
-            <element signature="method#compareTo#0;class#Round#0" expanded="false" />
-            <element signature="method#equals#0;class#Round#0" expanded="false" />
-            <element signature="method#hashCode#0;class#Round#0" expanded="false" />
+            <element signature="e#3428#3429#0" expanded="false" />
+            <element signature="e#3485#3486#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_152/src.zip!/java/util/concurrent/ConcurrentLinkedQueue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="104" column="13" lean-forward="false" selection-start-line="104" selection-start-column="13" selection-end-line="104" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/utils/Debug.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="10" column="2" lean-forward="false" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#log#0;class#Debug#0" expanded="false" />
+            <element signature="method#log#1;class#Debug#0" expanded="false" />
+            <element signature="method#logIf#0;class#Debug#0" expanded="false" />
+            <element signature="method#logIf#1;class#Debug#0" expanded="false" />
+            <element signature="method#printExecutionsLog#0;class#Debug#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/utils/Globals.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="4" column="2" lean-forward="false" selection-start-line="4" selection-start-column="2" selection-end-line="4" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/Channel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="18" column="2" lean-forward="false" selection-start-line="18" selection-start-column="2" selection-end-line="18" selection-end-column="2" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#launch#0;class#Channel#0" expanded="false" />
+            <element signature="method#onTermination#0;class#Channel#0" expanded="false" />
+            <element signature="method#broadcast#0;class#Channel#0" expanded="false" />
+            <element signature="class#SenderThread#0;class#Channel#0" expanded="false" />
+            <element signature="method#channelError#0;class#Channel#0" expanded="false" />
+            <element signature="method#logIf#0;class#Channel#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/stats/Summary.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="41" column="85" lean-forward="false" selection-start-line="41" selection-start-column="85" selection-end-line="41" selection-end-column="85" />
+        <state relative-caret-position="198">
+          <caret line="11" column="24" lean-forward="false" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#decidedValue#0;class#Summary#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="25" column="24" lean-forward="false" selection-start-line="25" selection-start-column="24" selection-end-line="25" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#Node#0;class#Node#0" expanded="false" />
+            <element signature="method#run#0;class#Node#0" expanded="false" />
+            <element signature="method#voterPhase#0;class#Node#0" expanded="false" />
+            <element signature="method#leaderPhase#0;class#Node#0" expanded="false" />
+            <element signature="method#electionPhase#0;class#Node#0" expanded="false" />
+            <element signature="method#brokenPhase#0;class#Node#0" expanded="false" />
+            <element signature="method#receive#0;class#Node#0" expanded="false" />
+            <element signature="method#advance#0;class#Node#0" expanded="false" />
+            <element signature="method#equals#0;class#Node#0" expanded="false" />
+            <element signature="e#14449#14450#0" expanded="true" />
+            <element signature="e#14477#14478#0" expanded="true" />
+            <element signature="e#14508#14509#0" expanded="true" />
+            <element signature="e#14536#14537#0" expanded="true" />
+            <element signature="class#Status#0;class#Node#0" expanded="false" />
+            <element signature="method#toString#0;class#Node#0" expanded="false" />
+            <element signature="method#duplication#0;class#Node#0" expanded="false" />
+            <element signature="method#filterMessages#0;class#Node#0" expanded="false" />
+            <element signature="method#nextRound#0;class#Node#0" expanded="false" />
+            <element signature="method#log#0;class#Node#0" expanded="false" />
+            <element signature="method#logIf#0;class#Node#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/stats/AverageSummary.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="26" column="41" lean-forward="true" selection-start-line="26" selection-start-column="41" selection-end-line="26" selection-end-column="41" />
+        <state relative-caret-position="288">
+          <caret line="16" column="46" lean-forward="true" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#calculate#0;class#AverageSummary#0" expanded="false" />
@@ -1019,33 +1054,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/utils/Debug.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#log#0;class#Debug#0" expanded="false" />
-            <element signature="method#log#1;class#Debug#0" expanded="false" />
-            <element signature="method#logIf#0;class#Debug#0" expanded="false" />
-            <element signature="method#logIf#1;class#Debug#0" expanded="false" />
-            <element signature="method#printLogSummary#0;class#Debug#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/utils/Globals.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/utils/Message.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="38" column="51" lean-forward="true" selection-start-line="38" selection-start-column="51" selection-end-line="38" selection-end-column="51" />
+        <state relative-caret-position="270">
+          <caret line="15" column="21" lean-forward="true" selection-start-line="15" selection-start-column="21" selection-end-line="15" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#getR1#0;class#Message#0" expanded="false" />
@@ -1060,64 +1072,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/Node.java">
+    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/utils/Round.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2088">
-          <caret line="367" column="29" lean-forward="true" selection-start-line="367" selection-start-column="29" selection-end-line="367" selection-end-column="29" />
+        <state relative-caret-position="720">
+          <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#Node#0;class#Node#0" expanded="false" />
-            <element signature="method#run#0;class#Node#0" expanded="false" />
-            <element signature="method#voterPhase#0;class#Node#0" expanded="false" />
-            <element signature="method#leaderPhase#0;class#Node#0" expanded="false" />
-            <element signature="method#electionPhase#0;class#Node#0" expanded="false" />
-            <element signature="method#brokenPhase#0;class#Node#0" expanded="false" />
-            <element signature="method#receive#0;class#Node#0" expanded="false" />
-            <element signature="method#equals#0;class#Node#0" expanded="false" />
-            <element signature="e#15282#15283#0" expanded="true" />
-            <element signature="e#15310#15311#0" expanded="true" />
-            <element signature="e#15341#15342#0" expanded="true" />
-            <element signature="e#15369#15370#0" expanded="true" />
-            <element signature="class#Status#0;class#Node#0" expanded="false" />
-            <element signature="method#toString#0;class#Node#0" expanded="false" />
-            <element signature="method#delay#0;class#Node#0" expanded="false" />
-            <element signature="e#16269#16270#0" expanded="true" />
-            <element signature="e#16328#16329#0" expanded="true" />
-            <element signature="e#16372#16373#0" expanded="true" />
-            <element signature="e#16434#16435#0" expanded="true" />
-            <element signature="method#duplication#0;class#Node#0" expanded="false" />
-            <element signature="method#filterMessages#0;class#Node#0" expanded="false" />
-            <element signature="method#nextRound#0;class#Node#0" expanded="false" />
-            <element signature="method#log#0;class#Node#0" expanded="false" />
-            <element signature="method#logIf#0;class#Node#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/Channel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="146" column="29" lean-forward="true" selection-start-line="146" selection-start-column="29" selection-end-line="146" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#launch#0;class#Channel#0" expanded="false" />
-            <element signature="method#onTermination#0;class#Channel#0" expanded="false" />
-            <element signature="method#verificaAccordo#0;class#Channel#0" expanded="false" />
-            <element signature="method#send#0;class#Channel#0" expanded="false" />
-            <element signature="method#broadcast#0;class#Channel#0" expanded="false" />
-            <element signature="class#SenderRunnable#0;class#Channel#0" expanded="false" />
-            <element signature="method#run#0;class#SenderRunnable#0;class#Channel#0" expanded="false" />
-            <element signature="method#channelError#0;class#Channel#0" expanded="false" />
-            <element signature="method#sendDelay#0;class#Channel#0" expanded="false" />
-            <element signature="method#logIf#0;class#Channel#0" expanded="false" />
+            <element signature="method#Round#0;class#Round#0" expanded="false" />
+            <element signature="e#631#632#0" expanded="true" />
+            <element signature="e#659#660#0" expanded="true" />
+            <element signature="e#685#686#0" expanded="true" />
+            <element signature="e#710#711#0" expanded="true" />
+            <element signature="e#796#797#0" expanded="true" />
+            <element signature="e#839#840#0" expanded="true" />
+            <element signature="method#compareTo#0;class#Round#0" expanded="false" />
+            <element signature="method#equals#0;class#Round#0" expanded="false" />
+            <element signature="method#hashCode#0;class#Round#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luca/anzalone/Paxos.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="774">
-          <caret line="45" column="37" lean-forward="true" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
+        <state relative-caret-position="342">
+          <caret line="27" column="38" lean-forward="false" selection-start-line="27" selection-start-column="38" selection-end-line="27" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#prompt#0;class#Paxos#0" expanded="false" />
