@@ -13,8 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Debug {
     // flags for logging
-    public static boolean ENABLED = true;  // enable or disable console log
-    public static boolean LOG_ALL = false; // enable all logging flags
+    public static boolean CONSOLE_LOG = true;  // enable or disable console log
+    public static boolean LOG_ALL = false;     // enable all logging flags
     public static boolean MSG_RECEPTION;
     public static boolean MSG_SENDING;
     public static boolean MSG_LOST;
@@ -47,7 +47,7 @@ public class Debug {
 
     /** log conditionally: according to a flag */
     public static void logIf(boolean flag, @NotNull String name, @NotNull String format, Object...args) {
-        if (Debug.ENABLED && flag)
+        if (flag || LOG_ALL)
             log(name, format, args);
     }
 

@@ -1,6 +1,7 @@
 package com.luca.anzalone.stats;
 
 import com.luca.anzalone.Channel;
+import com.luca.anzalone.utils.Debug;
 import com.sun.istack.internal.NotNull;
 
 /**
@@ -37,6 +38,9 @@ public class AverageSummary extends Summary {
             final Channel channel = new Channel(initialValues)
                     .launch();
 
+            Debug.log(String.format("15%d - Execution %d", System.currentTimeMillis(), i + 1),
+                    "---------------------------------------------------------------");
+
             channel.onTermination(ch -> {
                 final Summary summary = ch.summary;
                 summary.finishTime();
@@ -67,8 +71,8 @@ public class AverageSummary extends Summary {
         timeElapsed   = Math.floorDiv(timeElapsed, executionCount);
         duplicatedMessages = Math.floorDiv(duplicatedMessages, executionCount);
         avgRounds   = Math.floorDiv(avgRounds, executionCount);
-        avgBreaking = brokenEvents / (float) executionCount;
         totalNodes  = initialValues.length;
+        avgBreaking = brokenEvents / (float) executionCount;
 
         return this;
     }
@@ -102,7 +106,8 @@ public class AverageSummary extends Summary {
                 "- avg. duplicated: " + percentage(duplicatedMessages, totalMessages) + " (" + duplicatedMessages + ")\n\t" +
                 "> Nodes:\n\t\t" +
                 "- total: " + totalNodes + "\n\t\t" +
-                "- breaking per round: " + percentage(avgBreaking, brokenEvents) + " (" + Math.round(avgBreaking)+ ")\n\t" +
+//                "- breaking per round: " + percentage(avgBreaking, brokenEvents) + " (" + Math.round(avgBreaking)+ ")\n\t" +
+                "- breaking per round: " + percentage(avgBreaking, totalNodes) + " (" + Math.round(avgBreaking)+ ")\n\t" +
                 "> Executions:\n\t\t" +
                 "- count: " + executionCount + "\n\t\t" +
                 "- rounds: [min: " + minRounds + ", avg: " + avgRounds + ", max: " + maxRounds + "]\n\t\t" +

@@ -25,7 +25,7 @@ public class Paxos {
         // environment parameters
         Globals.CHANNEL_DELAY     = 100;
         Globals.TIMEOUT           = (Globals.CHANNEL_DELAY * 3);
-        Globals.MESSAGE_LOST_RATE = 30;
+        Globals.MESSAGE_LOST_RATE = 35+5;
         Globals.BROKEN_RATE       = 10;
         Globals.MESSAGE_DUPLICATION_RATE = 15;
         Globals.MAX_EXE_SPEED     = 10;
@@ -33,19 +33,20 @@ public class Paxos {
         Globals.ELECTION_TIMEOUT  = Globals.TIMEOUT + Globals.BROKEN_TIME;
 
         // debug profile
-        Debug.ENABLED = false;
-//        Debug.MSG_RECEPTION = true;
+        Debug.CONSOLE_LOG = false;
+//        Debug.LOG_ALL = true;
+        Debug.MSG_RECEPTION = true;
 //        Debug.MSG_SENDING   = true;
 //        Debug.MSG_LOST = true;
 //        Debug.MSG_DUPLICATED = true;
 //        Debug.NODE_STATE  = true;
 //        Debug.NODE_BROKEN = true;
 //        Debug.NODE_REPAIRED = true;
-        Debug.NODE_DECISION = true;
+//        Debug.NODE_DECISION = true;
         Debug.LOG_OLDROUND  = true;
         Debug.ELECTION_TIMEOUT = true;
 
-        // launch with benchmarking
+        // launch with summary
         prompt("Number of simulations: ", null, input -> {
             int num = 1;
             try { num = Integer.parseInt(input); } catch (RuntimeException ignored) {}

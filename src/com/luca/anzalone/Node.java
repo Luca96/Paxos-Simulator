@@ -93,7 +93,7 @@ public class Node extends Thread implements Runnable {
             }
 
             if (isElectionTimeoutExpired()) {
-                Debug.logIf(Debug.ELECTION_TIMEOUT, "Election-Timeout", toString());
+                dlog(Debug.ELECTION_TIMEOUT, round, "[ELECTION TIMEOUT EXPIRED] " + toString());
                 logIf(Debug.ELECTION_TIMEOUT, "Election-Timeout", toString());
 
                 deltaTime = currentTime();
@@ -102,7 +102,7 @@ public class Node extends Thread implements Runnable {
         }
 
         logIf(Debug.NODE_STATE, toString());
-        Debug.logIf(Debug.NODE_STATE, round, toString());
+        dlog(Debug.NODE_STATE, round, "State {%s}", this);
     }
 
 
@@ -112,8 +112,6 @@ public class Node extends Thread implements Runnable {
      *   - phase 2: reading begin messages, accepting the received value according to [commit]
      */
     private void voterPhase() {
-        final String phaseName = "Round-voter (" + round.getCount() + "):";
-
         // consuming collect messages
         filterMessages(collect).forEach(msg -> {
             final Round r = msg.getR1();
@@ -128,7 +126,7 @@ public class Node extends Thread implements Runnable {
                 channel.summary.updateRound(commit);
             } else {
                 channel.send(this, sender, new Message(oldRound, r.copy(), commit.copy()));
-                Debug.logIf(Debug.LOG_OLDROUND, phaseName, "[OLD-ROUND in collect] %s", msg);
+                dlog(Debug.LOG_OLDROUND, round, "[OLD-ROUND in collect] %s", msg);
             }
         });
 
@@ -146,7 +144,7 @@ public class Node extends Thread implements Runnable {
                 lastValue = v;
             } else {
                 channel.send(this, sender, new Message(oldRound, r.copy(), commit.copy()));
-                Debug.logIf(Debug.LOG_OLDROUND, phaseName, "[OLD-ROUND in begin] %s", msg);
+                dlog(Debug.LOG_OLDROUND, round, "[OLD-ROUND in begin] %s", msg);
             }
         });
     }
@@ -161,14 +159,13 @@ public class Node extends Thread implements Runnable {
      * The leader is, at the same time, a voter. Thus, the [collect] and [begin] messages are sent to itself.
      */
     private void leaderPhase() {
-        final String phaseName = "Round-leader (" + round.getCount() + "):";
         round = nextRound();
         channel.summary.updateRound(round);
 
         // -- phase 1
         // -------------------------------------------------
         channel.broadcast(this, new Message(collect, round), true);
-        Debug.log(phaseName, "[leader-%d] collect", rank);
+        dlog(round, "[Leader-%d] collect", rank);
 
         // wait a majority of last messages
         long last_timeout = currentTime() + TIMEOUT;
@@ -179,8 +176,8 @@ public class Node extends Thread implements Runnable {
             voterPhase();
 
             if (filterMessages(oldRound).size() > 0) {
-                logIf(Debug.LOG_OLDROUND, "ricevuto old-round in collect");
-                Debug.log(phaseName, "[leader-%d] 'old_round' in collect", rank);
+                logIf(Debug.LOG_OLDROUND, "Received: old-round in collect");
+                dlog(round, "[Leader-%d] received 'old_round' in collect", rank);
                 stato = voter;
                 return;  // lascia il passo
             }
@@ -209,15 +206,15 @@ public class Node extends Thread implements Runnable {
 
         if (!last_majority) {
             // no last-majority, so start another round
-            logIf(Debug.LOG_TIMEOUT, "TIMEOUT EXPIRED! -- nessuna maggioranza di [last]");
-            Debug.log(phaseName, "[leader-%d] last timeout expired", rank);
+            logIf(Debug.LOG_TIMEOUT, "TIMEOUT EXPIRED: No [last] majority");
+            dlog(Debug.LOG_TIMEOUT, round, "[Leader-%d] TIMEOUT EXPIRED: No [last] majority", rank);
             return;
         }
 
         // -- phase 2
         // -------------------------------------------------
         channel.broadcast(this, new Message(begin, round, proposedValue), true);
-        Debug.log(phaseName, "[leader-%d] begin", rank);
+        dlog(round, "[Leader-%d] begin", rank);
 
         // wait a majority of accept messages
         long accept_timeout = currentTime() + TIMEOUT;
@@ -227,8 +224,8 @@ public class Node extends Thread implements Runnable {
             voterPhase();
 
             if (filterMessages(oldRound).size() > 0) {
-                logIf(Debug.LOG_OLDROUND, "ricevuto old-round in begin");
-                Debug.log(phaseName, "[leader-%d] 'old_round' in begin", rank);
+                logIf(Debug.LOG_OLDROUND, "Received: old-round in begin");
+                dlog(round, "[Leader-%d] received 'old_round' in begin", rank);
                 stato = voter;
                 return;  // lascia il passo
             }
@@ -242,7 +239,7 @@ public class Node extends Thread implements Runnable {
                 value = proposedValue;
                 channel.summary.decidedValue(rank, value);
                 channel.broadcast(this, new Message(success, value));
-                Debug.log(phaseName, "[leader-%d] 'success' => %d", rank, value);
+                dlog(round, "[Leader-%d] 'success' => %d", rank, value);
                 return;  // terminate
             }
 
@@ -250,7 +247,10 @@ public class Node extends Thread implements Runnable {
                 return;
         }
 
-        logIf(Debug.LOG_TIMEOUT, "TIMEOUT EXPIRED! -- nessuna maggioranza di [accept]");
+        logIf(Debug.LOG_TIMEOUT, String.format("15%d %s", currentTime(), round),
+                "TIMEOUT EXPIRED: No [accept] majority");
+        dlog(Debug.LOG_TIMEOUT, round,
+                "[Leader-%d] TIMEOUT EXPIRED: No [accept] majority", rank);
     }
 
 
@@ -262,34 +262,32 @@ public class Node extends Thread implements Runnable {
      * Is possible, due to a lost of messages, that one or more nodes became leader.
      */
     private void electionPhase() {
-        final String phaseName = "Round-election (" + round.getCount() + "):";
         long timeout = currentTime() + TIMEOUT;
 
         nodesAlive.clear();
         nodesAlive.add(rank);
-        Debug.log(phaseName, "candidate-%d queryAlive", rank);
+        dlog(round, "[Candidate-%d] starts election", rank);
 
         // try to know the other nodes
         channel.broadcast(this, new Message(queryAlive), true);
         int minRank = rank;
 
         while (currentTime() < timeout) {
-            final List<Message> aliveMessages = filterMessages(alive);
-
-            for (Message msg: aliveMessages) {
-                int node = msg.getSender();
-                if (node < minRank)
-                    minRank = node;
-            }
+            filterMessages(alive);  // just consume alive messages (the rank is taken while receiving them)
 
             if (advance() == Status.changed)
                 return;
         }
 
+        // find the lowest known rank
+        for (Integer id: nodesAlive) {
+            if (id < minRank)
+                minRank = id;
+        }
+
         // elect the known node with the lowest rank
         stato = (rank == minRank) ? leader : voter;
-
-        Debug.log(phaseName, "elezione terminata {%s}", this);
+        dlog(round, "ELECTION TERMINATED {%s}", this);
     }
 
     /**
@@ -308,11 +306,11 @@ public class Node extends Thread implements Runnable {
         nodesAlive.clear();
         stato = candidate;
 
-        Debug.logIf(Debug.NODE_REPAIRED, round, "%s è stato riparato!", this);
-        logIf(Debug.NODE_REPAIRED, "è stato riparato!");
+        dlog(Debug.NODE_REPAIRED, round, "REPAIRED [Node-%d]", rank);
+        logIf(Debug.NODE_REPAIRED, "REPAIRED [Node-%d]", rank);
 
         // TODO: cambiare il valore proposto con uno di default?
-        // reset memoria nodo
+        // node memory reset
         lastValue     = value;
         proposedValue = value;
         round  = new Round(0, rank);
@@ -330,7 +328,7 @@ public class Node extends Thread implements Runnable {
             return;
 
         logIf(Debug.MSG_RECEPTION, "message received: %s", msg);
-        Debug.logIf(Debug.MSG_RECEPTION, round, "Node-%d received %s", rank, msg);
+        dlog(Debug.MSG_RECEPTION, round, "RECEPTION for [Node-%d] of {%s}", rank, msg);
 
         // update the known-node-set
         nodesAlive.add(msg.getSender());
@@ -340,7 +338,7 @@ public class Node extends Thread implements Runnable {
 
         // duplication event
         if (msg.getSender() != rank && duplication()) {
-            Debug.logIf(Debug.MSG_DUPLICATED, round, "%s da [%d] a [%d] è stato duplicato!",
+            dlog(Debug.MSG_DUPLICATED, round, "DUPLICATION of {%s} from [%d] to [%d]",
                     msg, msg.getSender(), rank
             );
 
@@ -362,14 +360,8 @@ public class Node extends Thread implements Runnable {
         delay();
 
         if (canBroke()) {
-            Debug.log(round, "%s si è rotto!", this);
+            dlog(round, "BROKEN {%s}", this);
             channel.summary.brokenEvents++;
-
-            if (leader.equals(stato))
-                logIf(Debug.NODE_BROKEN, "LEADER è temporaneamente DOWN!");
-            else
-                logIf(Debug.NODE_BROKEN, "è temporaneamente DOWN!");
-
             stato = broken;
             return Status.changed;
         }
@@ -390,9 +382,8 @@ public class Node extends Thread implements Runnable {
             value = valueDecided;
             channel.summary.decidedValue(rank, value);
 
-            logIf(Debug.NODE_DECISION, "ha deciso %d", value);
-            Debug.log(round, "Node-%d-%s ha deciso %d", rank, stato, value);
-            Debug.log(SUCCESS_PHASE, "Node-%d-%s ha deciso %d", rank, stato, value);
+            logIf(Debug.NODE_DECISION, "has decided %d", value);
+            dlog(round, "[Node-%d-%s] has decided %d", rank, stato, value);
 
             // spread (to others) the success
             channel.broadcast(this, new Message(success, value));
@@ -401,7 +392,7 @@ public class Node extends Thread implements Runnable {
         }
 
         logIf(Debug.NODE_STATE, this.toString());
-        Debug.logIf(Debug.NODE_STATE, round, this.toString());
+        dlog(Debug.NODE_STATE, round, toString());
 
         return Status.alive;
     }
@@ -446,8 +437,8 @@ public class Node extends Thread implements Runnable {
 
     @Override
     public String toString() {
-        return String.format("Node-%d [%s, round: %s, commit: %s, value: %d, nodes: %d]",
-                rank, stato, round, commit, proposedValue, nodesAlive.size());
+        return String.format("Node-%d [%s, round: %s, commit: %s, value: %d, known_nodes: %s]",
+                rank, stato, round, commit, proposedValue, nodesAlive);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -503,8 +494,12 @@ public class Node extends Thread implements Runnable {
             return round.increase();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // -- Logging
+    //------------------------------------------------------------------------------------------------------------------
+    /** console logging shorthands */
     private void log(final String format, Object...args) {
-        if (Debug.ENABLED)
+        if (Debug.CONSOLE_LOG)
             log.warning("[" + rank + "] " + String.format(format, args));
     }
 
@@ -513,13 +508,27 @@ public class Node extends Thread implements Runnable {
             log(format, args);
     }
 
+    /** Debug logging shorthands */
+    private void dlog(final String key, final String format, Object...args) {
+        Debug.log(key, format, args);
+    }
+
+    private void dlog(final Round round, final String format, Object...args) {
+        final String key = String.format("15%d %s", currentTime(), round);
+        Debug.log(key, format, args);
+    }
+
+    private void dlog(boolean flag, final String key, final String format, Object...args) {
+        Debug.logIf(flag, key, format, args);
+    }
+
+    private void dlog(boolean flag, final Round round, final String format, Object...args) {
+        final String key = String.format("15%d %s", currentTime(), round);
+        Debug.logIf(flag, key, format, args);
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     // -- CONSTANTS
     //------------------------------------------------------------------------------------------------------------------
     private static final Random generator = new Random();
-    private static final String ELECTION_PHASE = "0. Election phase:";
-    private static final String LEADER_PHASE   = "1. Leader phase:";
-    private static final String VOTER_PHASE    = "2. Voter phase:";
-    private static final String BROKEN_PHASE   = "3. Broken Phase:";
-    private static final String SUCCESS_PHASE  = "4. Success phase:";
 }

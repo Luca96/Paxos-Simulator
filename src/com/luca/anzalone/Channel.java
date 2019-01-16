@@ -55,25 +55,25 @@ public class Channel {
     }
 
     /** sends a [message] across the simulated communication channel */
-    public void send(@NotNull Node from, int to, @NotNull Message message) {
+    public void send(@NotNull final Node from, int to, @NotNull final Message message) {
         assert to < nodes.size();
 
-        new SenderThread(from, to, message)
+        new SenderThread(from, to, message.copy())
                 .start();
     }
 
     /** broadcasts the given [message] */
-    public void broadcast(@NotNull Node from, @NotNull Message message, boolean sendToMe) {
+    public void broadcast(@NotNull final Node from, @NotNull final Message message, boolean sendToMe) {
         for (Node node: nodes) {
             if (!sendToMe && from.equals(node))
                 continue;
 
-            send(from, node.getRank(), message.copy());
+            send(from, node.getRank(), message);
         }
     }
 
     /** shorthand */
-    public void broadcast(@NotNull Node from, @NotNull Message message) {
+    public void broadcast(@NotNull final Node from, @NotNull final Message message) {
         broadcast(from, message, false);
     }
 
@@ -93,7 +93,9 @@ public class Channel {
             this.message = message;
             this.message.setSender(from.getRank());
 
-            logIf(Debug.MSG_SENDING, "Invio di %s da [%d] a [%d]", message, from.getRank(), to);
+            Debug.logIf(Debug.MSG_SENDING, String.format("15%d %s", System.currentTimeMillis(), from.getRound()),
+                    "SENDING of {%s} from [%d] to [%d]", message, from.getRank(), to);
+            logIf(Debug.MSG_SENDING, "SENDING of {%s} from [%d] to [%d]", message, from.getRank(), to);
             summary.totalMessages++;
         }
 
@@ -105,8 +107,9 @@ public class Channel {
             if (from.getRank() != receiver.getRank()) {
                 if (channelError()) {
                     summary.lostMessages++;
-                    logIf(Debug.MSG_LOST, "%s da [%d] a [%d] è stato perso", message, from.getRank(), to);
-                    Debug.log(from.getRound(), "%s da [%d] a [%d] è stato perso", message, from.getRank(), to);
+                    logIf(Debug.MSG_LOST, "LOST of {%s} from [%d] to [%d]", message, from.getRank(), to);
+                    Debug.log(String.format("15%d %s", System.currentTimeMillis(), from.getRound()),
+                            "LOST of {%s} from [%d] to [%d]", message, from.getRank(), to);
                     return;
                 }
 
@@ -119,12 +122,7 @@ public class Channel {
         /** simulate the network (communication) delay */
         private void sendDelay() {
             final Random generator = new Random();
-
-            try {
-                sleep(generator.nextInt(1 + CHANNEL_DELAY));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            try { sleep(generator.nextInt(1 + CHANNEL_DELAY)); } catch (InterruptedException ignored) { }
         }
     }
 
@@ -138,7 +136,7 @@ public class Channel {
     }
 
     private void logIf(boolean flag, final String format, Object...args) {
-        if (Debug.ENABLED && (flag || Debug.LOG_ALL))
+        if (Debug.CONSOLE_LOG && (flag || Debug.LOG_ALL))
             log.warning(String.format(format, args));
     }
 }
